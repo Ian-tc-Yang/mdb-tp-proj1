@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 // TODO: Import the following items from the 'react-native' library: Image, Text, View, and TouchableOpacity.
+import { View, Image, Text, TouchableOpacity } from "react-native";
 
 import { styles } from "../constants/Styles";
 import { nameToPic } from "../constants/Constants";
@@ -11,6 +12,12 @@ const names = Object.keys(nameToPic);
 
 export default function GameScreen() {
   // TODO: Declare and initialize state variables here, using "useState".
+  const [score, setScore] = useState(0);
+  const [total, setTotal] = useState(0);
+  const [correctImage, setCorrectImage] = useState(null);
+  const [nameOptions, setNameOptions] = useState([]);
+  const [correctName, setCorrectName] = useState(null);
+
 
   // State for the timer is handled for you.
   const [timeLeft, setTimeLeft] = useState(5000);
@@ -23,6 +30,7 @@ export default function GameScreen() {
     } else {
       // Time has expired
       // TODO: update appropriate state variables
+      setTotal(total++);
     }
   };
 
@@ -46,13 +54,20 @@ export default function GameScreen() {
     nameOptions = shuffle(nameOptions);
 
     // TODO: Update state here.
-
+    setCorrectImage(correctImage);
+    setNameOptions(nameOptions);
+    setCorrectName(correctName);
     setTimeLeft(5000);
   };
 
   // Called when user taps a name option.
   // TODO: Update correct # and total # state values.
-  const selectedNameChoice = (index) => {};
+  const selectedNameChoice = (index) => {
+    if (nameOptions[index] === correctName){
+      setScore(score++);
+    }
+    setTotal(total++);
+  };
 
   // Call the countDown() method every 10 milliseconds.
   useEffect(() => {
@@ -70,6 +85,7 @@ export default function GameScreen() {
     },
     [
       /* TODO: Your State Variable Goes Here */
+      total
     ]
   );
 
@@ -85,7 +101,9 @@ export default function GameScreen() {
         onPress={() => selectedNameChoice(j)}
       >
         <Text style={styles.buttonText}>
-          {/* TODO: Use something from state here. (Hint: What do we want inside the buttons?) */}
+          {/* TODO: Use something from state here. (Hint: What do we want inside the buttons?) */
+          nameOptions[j]
+          }
         </Text>
       </TouchableOpacity>
     );
@@ -96,6 +114,14 @@ export default function GameScreen() {
   // Style & return the view.
   return (
     <View>
+      <Text style={styles.timerText}>
+        Time Remaining: {timeRemainingStr} s
+      </Text>
+      <Text style={styles.scoreText}>
+        Correct: {correctCount} / {totalCount}
+      </Text>
+      <Image source={correctImage} style={styles.image} />
+      {nameButtons}
       {/* TODO: Build out your UI using Text and Image components. */}
       {/* Hint: What does the nameButtons list above hold? 
           What types of objects is this list storing?
