@@ -17,6 +17,7 @@ export default function GameScreen() {
   const [correctImage, setCorrectImage] = useState(null);
   const [nameOptions, setNameOptions] = useState([]);
   const [correctName, setCorrectName] = useState(null);
+  const [bool, setBool] = useState(false)
 
 
   // State for the timer is handled for you.
@@ -30,7 +31,7 @@ export default function GameScreen() {
     } else {
       // Time has expired
       // TODO: update appropriate state variables
-      setTotal(total++);
+      setBool(true);
     }
   };
 
@@ -64,9 +65,9 @@ export default function GameScreen() {
   // TODO: Update correct # and total # state values.
   const selectedNameChoice = (index) => {
     if (nameOptions[index] === correctName){
-      setScore(score++);
+      setScore(score+1);
     }
-    setTotal(total++);
+    setTotal(total+1);
   };
 
   // Call the countDown() method every 10 milliseconds.
@@ -117,11 +118,12 @@ export default function GameScreen() {
       <Text style={styles.timerText}>
         Time Remaining: {timeRemainingStr} s
       </Text>
+      {bool && <Text style={styles.timerText}>Game Over</Text>}
       <Text style={styles.scoreText}>
-        Correct: {correctCount} / {totalCount}
+        Correct: {score} / {total}
       </Text>
       <Image source={correctImage} style={styles.image} />
-      {nameButtons}
+      {!bool && nameButtons}
       {/* TODO: Build out your UI using Text and Image components. */}
       {/* Hint: What does the nameButtons list above hold? 
           What types of objects is this list storing?
